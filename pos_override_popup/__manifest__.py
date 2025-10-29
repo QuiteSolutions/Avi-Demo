@@ -15,7 +15,9 @@
             'pos_override_popup/static/src/js/override_popup_widget.js',
         ],
     },
-    'data': [],
+    'data': [
+        'i18n/he.po',
+    ],
     'author': 'Your Company',
     'website': 'https://www.yourcompany.com',
     'installable': True,
