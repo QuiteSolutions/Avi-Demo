@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="pos_base_popup.BasePopupWidget">
+        <div class="base-popup-widget">
+            <div class="popup-header">
+                <label class="popup-title" t-esc="state.title"/>
+            </div>
+            <div class="popup-content">
+                <label class="popup-name" t-esc="state.name"/>
+                <input type="text" 
+                       class="popup-input" 
+                       t-model="state.inputValue"
+                       placeholder="Enter text here"/>
+                <button class="btn btn-primary" 
+                        t-on-click="onButtonClick">
+                    <t t-esc="_t('Show Message')"/>
+                </button>
+            </div>
+        </div>
+    </t>
+</templates>
