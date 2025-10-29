@@ -20,16 +20,22 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/pos_extended_popup/static/src/js/extended_popup_widget.js:0
 msgid "Hello 2"
-msgstr  "2"
+msgstr  "שלום @"
 
 #. module: pos_extended_popup
 #. odoo-javascript
 #: code:addons/pos_extended_popup/static/src/js/extended_popup_widget.js:0
 msgid "Name 2"
-msgstr  "2"
+msgstr  "שם @"
 
 #. module: pos_extended_popup
 #. odoo-javascript
 #: code:addons/pos_extended_popup/static/src/js/extended_popup_widget.js:0
 msgid "Title 2"
-msgstr  "2"
+msgstr  "כותרת @"
+
+#. module: pos_base_popup
+#. odoo-javascript
+#: code:addons/pos_base_popup/static/src/xml/product_screen_button.xml:0
+msgid "Open Base Popup"
+msgstr "@ פתח חלון קופץ"
