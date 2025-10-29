@@ -15,9 +15,6 @@
             'pos_extended_popup/static/src/js/extended_popup_widget.js',
         ],
     },
-    'data': [
-        'i18n/he_IL.po',
-    ],
     'author': 'Your Company',
     'website': 'https://www.yourcompany.com',
     'installable': True,

@@ -17,9 +17,6 @@
             'pos_base_popup/static/src/xml/product_screen_button.xml',
         ],
     },
-    'data': [
-        'i18n/he.po',
-    ],
     'author': 'Your Company',
     'website': 'https://www.yourcompany.com',
     'installable': True,
