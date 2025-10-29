@@ -20,39 +20,39 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/pos_extended_popup/static/src/js/extended_popup_widget.js:0
 msgid "Hello 2"
-msgstr  "שלום @"
+msgstr "שלום @"
 
 #. module: pos_extended_popup
 #. odoo-javascript
 #: code:addons/pos_extended_popup/static/src/js/extended_popup_widget.js:0
 msgid "Name 2"
-msgstr  "שם @"
+msgstr "שם @"
 
 #. module: pos_extended_popup
 #. odoo-javascript
 #: code:addons/pos_extended_popup/static/src/js/extended_popup_widget.js:0
 msgid "Title 2"
-msgstr  "כותרת @"
+msgstr "כותרת @"
 
 #. module: pos_base_popup
 #. odoo-javascript
 #: code:addons/pos_base_popup/static/src/xml/product_screen_button.xml:0
 msgid "Open Base Popup"
-msgstr "@ פתח חלון קופץ"
+msgstr "פתח חלון קופץ @"
 
 #. module: point_of_sale
 #. odoo-javascript
 #: code:addons/point_of_sale/static/src/app/navbar/cash_move_popup/cash_move_receipt/cash_move_receipt.xml:0
 msgid "AMOUNT"
-msgstr "@ סכום"
+msgstr "סכום @"
 
 #. module: point_of_sale
 #. odoo-javascript
 #: code:addons/point_of_sale/static/src/backend/pos_kanban_view/pos_kanban_view.js:0
 msgid "Access Denied"
-msgstr " @ הגישה נדחתה"
+msgstr "הגישה נדחתה @"
 
 #. module: point_of_sale
 #: model:ir.model.fields,field_description:point_of_sale.field_pos_config__access_token
 msgid "Access Token"
-msgstr "@ אסימון גישה"
+msgstr "אסימון גישה @"
