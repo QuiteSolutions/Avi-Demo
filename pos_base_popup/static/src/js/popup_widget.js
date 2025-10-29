@@ -8,7 +8,8 @@ import { _t } from "@web/core/l10n/translation";
 
 export class BasePopupWidget extends Component {
     static template = "pos_base_popup.BasePopupWidget";
-    
+    static props = {};
+
     setup() {
         super.setup();
         this.pos = usePos();
