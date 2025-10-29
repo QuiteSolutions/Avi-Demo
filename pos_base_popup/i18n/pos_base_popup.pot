@@ -1,0 +1,29 @@
+# Translation template for Odoo Module.
+# This file contains the translation of the following modules:
+# * pos_base_popup
+#
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+
+#. module: pos_base_popup
+#: code:static/src/js/popup_widget.js:0
+msgid "Title 1"
+msgstr ""
+
+#. module: pos_base_popup
+#: code:static/src/js/popup_widget.js:0
+msgid "Name 1"
+msgstr ""
+
+#. module: pos_base_popup
+#: code:static/src/js/popup_widget.js:0
+msgid "Hello 1"
+msgstr ""
+
+#. module: pos_base_popup
+#: code:static/src/js/popup_widget.xml:0
+msgid "Show Message"
+msgstr ""
