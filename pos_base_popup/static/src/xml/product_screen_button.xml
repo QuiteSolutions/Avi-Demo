@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <!-- Add a button to the ProductScreen to open the BasePopupWidget -->
+    <t t-name="pos_base_popup.ProductScreenButton"
+       t-inherit="point_of_sale.ProductScreen"
+       t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('leftpane')]" position="inside">
+            <div class="base-popup-trigger mt-2">
+                <button class="btn btn-lg btn-primary w-100"
+                        t-on-click="onShowBasePopup">
+                    <i class="fa fa-window-maximize me-2"/>
+                    <t t-esc="_t('Open Base Popup')"/>
+                </button>
+            </div>
+        </xpath>
+    </t>
+</templates>

@@ -13,6 +13,8 @@
         'point_of_sale._assets_pos': [
             'pos_base_popup/static/src/js/popup_widget.js',
             'pos_base_popup/static/src/js/popup_widget.xml',
+            'pos_base_popup/static/src/js/product_screen_patch.js',
+            'pos_base_popup/static/src/xml/product_screen_button.xml',
         ],
     },
     'data': [],
