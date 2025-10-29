@@ -15,7 +15,11 @@
             'pos_base_popup/static/src/js/popup_widget.xml',
         ],
     },
+    'data': [],
+    'author': 'Your Company',
+    'website': 'https://www.yourcompany.com',
     'installable': True,
     'application': False,
+    'auto_install': False,
     'license': 'LGPL-3',
 }

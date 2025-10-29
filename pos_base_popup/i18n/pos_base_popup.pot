@@ -27,3 +27,8 @@ msgstr ""
 #: code:static/src/js/popup_widget.xml:0
 msgid "Show Message"
 msgstr ""
+
+#. module: pos_base_popup
+#: code:static/src/js/popup_widget.xml:0
+msgid "Enter text here"
+msgstr ""

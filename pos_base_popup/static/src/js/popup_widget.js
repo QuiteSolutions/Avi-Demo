@@ -10,6 +10,7 @@ export class BasePopupWidget extends Component {
     static template = "pos_base_popup.BasePopupWidget";
     
     setup() {
+        super.setup();
         this.pos = usePos();
         this.state = useState({
             title: _t("Title 1"),
