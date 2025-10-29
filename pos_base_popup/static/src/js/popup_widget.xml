@@ -8,14 +8,14 @@
             <div class="popup-content">
                 <div class="mb-3">
                     <label class="form-label popup-name" t-esc="state.name"/>
-                    <input type="text" 
-                           class="form-control popup-input" 
+                    <input type="text"
+                           class="form-control popup-input"
                            t-model="state.inputValue"
-                           t-att-placeholder="_t('Enter text here')"/>
+                           placeholder="Enter text here"/>
                 </div>
-                <button class="btn btn-primary" 
+                <button class="btn btn-primary"
                         t-on-click="onButtonClick">
-                    <t t-esc="_t('Show Message')"/>
+                    Show Message
                 </button>
             </div>
         </div>
