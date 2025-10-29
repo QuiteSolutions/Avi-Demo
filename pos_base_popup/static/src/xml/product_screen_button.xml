@@ -8,8 +8,7 @@
             <div class="base-popup-trigger mt-2">
                 <button class="btn btn-lg btn-primary w-100"
                         t-on-click="onShowBasePopup">
-                    <i class="fa fa-window-maximize me-2"/>
-                    <t t-esc="_t('Open Base Popup')"/>
+                    <i class="fa fa-window-maximize me-2"/>Open Base Popup
                 </button>
             </div>
         </xpath>
