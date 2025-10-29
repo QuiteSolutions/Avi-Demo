@@ -20,37 +20,37 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/pos_base_popup/static/src/js/popup_widget.xml:0
 msgid "Enter text here"
-msgstr "12 הכנס טקסט כאן"
+msgstr "22 הכנס טקסט כאן"
 
 #. module: pos_base_popup
 #. odoo-javascript
 #: code:addons/pos_base_popup/static/src/js/popup_widget.js:0
 msgid "Hello 1"
-msgstr "שלום 12"
+msgstr "שלום 22"
 
 #. module: pos_base_popup
 #. odoo-javascript
 #: code:addons/pos_base_popup/static/src/js/popup_widget.js:0
 msgid "Name 1"
-msgstr "שם 12"
+msgstr "שם 22"
 
 #. module: pos_base_popup
 #. odoo-javascript
 #: code:addons/pos_base_popup/static/src/xml/product_screen_button.xml:0
 msgid "Open Base Popup"
-msgstr "12 פתח חלון קופץ"
+msgstr "22 פתח חלון קופץ"
 
 #. module: pos_base_popup
 #. odoo-javascript
 #: code:addons/pos_base_popup/static/src/js/popup_widget.xml:0
 msgid "Show Message"
-msgstr "12 הצג הודעה"
+msgstr "22 הצג הודעה"
 
 #. module: pos_base_popup
 #. odoo-javascript
 #: code:addons/pos_base_popup/static/src/js/popup_widget.js:0
 msgid "Title 1"
-msgstr "כותרת 12"
+msgstr "כותרת 22"
 
 #. module: pos_restaurant
 #. odoo-javascript

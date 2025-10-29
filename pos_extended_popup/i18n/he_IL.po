@@ -39,3 +39,20 @@ msgstr  "כותרת @"
 #: code:addons/pos_base_popup/static/src/xml/product_screen_button.xml:0
 msgid "Open Base Popup"
 msgstr "@ פתח חלון קופץ"
+
+#. module: point_of_sale
+#. odoo-javascript
+#: code:addons/point_of_sale/static/src/app/navbar/cash_move_popup/cash_move_receipt/cash_move_receipt.xml:0
+msgid "AMOUNT"
+msgstr "@ סכום"
+
+#. module: point_of_sale
+#. odoo-javascript
+#: code:addons/point_of_sale/static/src/backend/pos_kanban_view/pos_kanban_view.js:0
+msgid "Access Denied"
+msgstr " @ הגישה נדחתה"
+
+#. module: point_of_sale
+#: model:ir.model.fields,field_description:point_of_sale.field_pos_config__access_token
+msgid "Access Token"
+msgstr "@ אסימון גישה"
