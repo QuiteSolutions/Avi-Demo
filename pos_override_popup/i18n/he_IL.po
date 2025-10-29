@@ -39,3 +39,9 @@ msgstr  "3"
 #: code:addons/pos_base_popup/static/src/js/popup_widget.xml:0
 msgid "Enter text here"
 msgstr "3 הכנס טקסט כאן"
+
+#. module: pos_base_popup
+#. odoo-javascript
+#: code:addons/pos_base_popup/static/src/xml/product_screen_button.xml:0
+msgid "Open Base Popup"
+msgstr "3 פתח חלון קופץ"
