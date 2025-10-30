@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    
+    <!-- Extended popup widget with input field and live preview -->
+    <t t-name="pos_load_popup.LoadPopupWidget">
+        <div class="load-popup-widget p-4">
+            
+            <!-- Header -->
+            <div class="popup-header mb-4">
+                <h4 class="popup-title mb-0">
+                    <i class="fa fa-pencil me-2"/>
+                    Text Input with Live Preview
+                </h4>
+            </div>
+
+            <!-- Input Section -->
+            <div class="input-section mb-4">
+                <label class="form-label fw-bold mb-2">Enter Text:</label>
+                <input 
+                    type="text"
+                    class="form-control form-control-lg"
+                    placeholder="Type something to see live preview..."
+                    t-model="state.inputValue"
+                    t-on-change="(e) => this.onInputChange(e)"
+                    t-on-input="(e) => this.onInputChange(e)"
+                />
+                <small class="form-text text-muted mt-2">
+                    <i class="fa fa-info-circle me-1"/>
+                    Characters: <strong t-esc="state.characterCount"/>
+                </small>
+            </div>
+
+            <!-- Format Buttons -->
+            <div class="format-buttons mb-4">
+                <button 
+                    class="btn btn-outline-primary btn-sm me-2"
+                    t-on-click="() => this.onFormatUppercase()"
+                    t-if="state.inputValue.trim()">
+                    <i class="fa fa-arrow-up me-1"/>Uppercase
+                </button>
+                <button 
+                    class="btn btn-outline-primary btn-sm me-2"
+                    t-on-click="() => this.onFormatLowercase()"
+                    t-if="state.inputValue.trim()">
+                    <i class="fa fa-arrow-down me-1"/>Lowercase
+                </button>
+                <button 
+                    class="btn btn-outline-primary btn-sm me-2"
+                    t-on-click="() => this.onFormatCapitalize()"
+                    t-if="state.inputValue.trim()">
+                    <i class="fa fa-font me-1"/>Capitalize
+                </button>
+                <button 
+                    class="btn btn-outline-danger btn-sm"
+                    t-on-click="() => this.onClearInput()"
+                    t-if="state.inputValue.trim()">
+                    <i class="fa fa-trash me-1"/>Clear
+                </button>
+            </div>
+
+            <!-- Live Preview Section -->
+            <div class="preview-section">
+                <label class="form-label fw-bold mb-2">
+                    <i class="fa fa-eye me-2"/>Live Preview:
+                </label>
+                <div class="preview-box p-3 rounded border border-info bg-light">
+                    <div class="preview-text" t-esc="state.previewText">
+                    </div>
+                </div>
+                <small class="form-text text-muted mt-2">
+                    <i class="fa fa-check-circle me-1"/>
+                    Updates as you type
+                </small>
+            </div>
+
+            <!-- Status Indicator -->
+            <div class="status-indicator mt-3 pt-3 border-top">
+                <small class="text-muted">
+                    <span t-if="state.inputValue.trim()">
+                        <i class="fa fa-circle text-success me-1"/>
+                        Input detected
+                    </span>
+                    <span t-if="not state.inputValue.trim()">
+                        <i class="fa fa-circle text-secondary me-1"/>
+                        Awaiting input
+                    </span>
+                </small>
+            </div>
+
+        </div>
+    </t>
+
+    <!-- Style definitions for the widget -->
+    <t t-name="pos_load_popup.LoadPopupWidget.Styles">
+        <style>
+            .load-popup-widget {
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .input-section .form-control {
+                border: 2px solid #dee2e6;
+                transition: border-color 0.3s ease;
+            }
+
+            .input-section .form-control:focus {
+                border-color: #0d6efd;
+                box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+            }
+
+            .preview-box {
+                background: #f8f9fa !important;
+                border: 2px solid #0dcaf0 !important;
+                min-height: 60px;
+                display: flex;
+                align-items: center;
+                font-size: 16px;
+                font-weight: 500;
+                word-wrap: break-word;
+                word-break: break-all;
+            }
+
+            .preview-text {
+                color: #0d6efd;
+                font-weight: 600;
+            }
+
+            .format-buttons {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .format-buttons .btn {
+                white-space: nowrap;
+            }
+
+            .status-indicator {
+                padding-top: 12px;
+                border-top: 1px solid #dee2e6;
+            }
+
+            .fa-circle {
+                font-size: 8px;
+            }
+
+            .text-success {
+                color: #198754 !important;
+            }
+
+            .text-secondary {
+                color: #6c757d !important;
+            }
+        </style>
+    </t>
+
+</templates>
