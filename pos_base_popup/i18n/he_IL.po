@@ -617,7 +617,7 @@ msgstr "נדרשת פעולה"
 #: code:addons/point_of_sale/static/src/app/screens/product_screen/action_pad/action_pad.xml:0
 #: code:addons/point_of_sale/static/src/app/screens/product_screen/control_buttons/control_buttons.xml:0
 msgid "Actions"
-msgstr "פעולות"
+msgstr "123123@132"
 
 #. module: point_of_sale
 #: model:ir.model.fields,help:point_of_sale.field_pos_config__module_pos_sms
@@ -1829,7 +1829,7 @@ msgstr "בחר את החנות שלך"
 #. odoo-javascript
 #: code:addons/point_of_sale/static/src/app/navbar/navbar.xml:0
 msgid "Clear Cache"
-msgstr ""
+msgstr "123"
 
 #. module: point_of_sale
 #: model_terms:ir.ui.view,arch_db:point_of_sale.pos_config_view_form
@@ -3455,13 +3455,13 @@ msgstr "קבץ את הפריטים בעגלת הקניות לפי קטגוריה
 #: code:addons/pos_restaurant/static/src/app/control_buttons/control_buttons.xml:0
 #: model:ir.model.fields,field_description:pos_restaurant.field_pos_order__customer_count
 msgid "Guests"
-msgstr "אורחים"
+msgstr "test1"
 
 #. module: pos_restaurant
 #. odoo-javascript
 #: code:addons/pos_restaurant/static/src/app/control_buttons/control_buttons.js:0
 msgid "Guests?"
-msgstr "s123"
+msgstr "test2"
 
 #. module: point_of_sale
 #: model:ir.model,name:point_of_sale.model_ir_http
