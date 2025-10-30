@@ -56,5 +56,5 @@ msgstr "כותרת 22"
 #. odoo-javascript
 #: code:addons/pos_restaurant/static/src/js/Screens/ProductScreen/ControlButtons/TableGuestsButton.js:0
 msgid "Guests?"
-msgstr "כמה אתם?"
+msgstr "כ"
 
