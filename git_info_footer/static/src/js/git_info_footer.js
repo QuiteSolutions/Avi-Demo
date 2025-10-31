@@ -18,7 +18,8 @@ export class GitInfoFooter extends Component {
         this.state = useState({
             gitBranch: "loading...",
             gitCommit: "loading...",
-            odooVersion: "loading...",
+            addonsBranch: "loading...",
+            addonsCommit: "loading...",
             loaded: false,
             error: null,
         });
@@ -35,7 +36,8 @@ export class GitInfoFooter extends Component {
             const result = await rpc("/git_info_footer/get_info", {});
             this.state.gitBranch = result.git_branch || "unknown";
             this.state.gitCommit = result.git_commit || "unknown";
-            this.state.odooVersion = result.odoo_version || this.getFallbackOdooVersion();
+            this.state.addonsBranch = result.addons_branch || 'unknown';
+            this.state.addonsCommit = result.addons_commit || 'unknown';
             this.state.loaded = true;
             this.state.error = null;
         } catch (error) {
@@ -43,7 +45,8 @@ export class GitInfoFooter extends Component {
             // Provide fallback values
             this.state.gitBranch = "fetch error";
             this.state.gitCommit = "fetch error";
-            this.state.odooVersion = this.getFallbackOdooVersion();
+            this.state.addonsBranch = this.getFallbackAddonsBranch();
+            this.state.addonsCommit = this.getFallbackAddonsCommit();
             this.state.loaded = true;
             this.state.error = error.message;
         }
@@ -70,16 +73,33 @@ export class GitInfoFooter extends Component {
         }
     }
 
+    getFallbackAddonsBranch() {
+        try {
+            // Try to infer branch from window.odoo info if available
+            if (window.odoo && window.odoo.info && window.odoo.info.server_version) {
+                return 'unknown';
+            }
+            return 'unknown';
+        } catch (error) {
+            return 'unknown';
+        }
+    }
+
+    getFallbackAddonsCommit() {
+        return 'unknown';
+    }
+
     get displayText() {
         if (this.state.error) {
             return `freeText | ERROR: ${this.state.error}`;
         }
-        
+
         if (!this.state.loaded) {
             return "freeText | Loading...";
         }
-        
-        return `freeText | ${this.state.gitBranch}/${this.state.gitCommit} | ${this.state.odooVersion}`;
+
+        // Display addons branch and commit (addons-branch/addons-git-commit)
+        return `freeText | ${this.state.addonsBranch}/${this.state.addonsCommit}`;
     }
 
     /**

@@ -49,16 +49,63 @@ class GitInfoController(http.Controller):
             
             # Get Odoo version/commit
             odoo_version = odoo.release.version
-            
+
+            # Additionally, try to get git info for the addons (this module)
+            try:
+                module_root = os.path.dirname(os.path.dirname(__file__))
+                # If module root is not a git repo, try the parent (workspace) dir
+                addons_branch = 'unknown'
+                addons_commit = 'unknown'
+                if os.path.isdir(os.path.join(module_root, '.git')):
+                    addons_branch = subprocess.check_output(
+                        ['git', 'rev-parse', '--abbrev-ref', 'HEAD'],
+                        cwd=module_root,
+                        stderr=subprocess.DEVNULL,
+                        text=True,
+                        timeout=5
+                    ).strip()
+                    addons_commit = subprocess.check_output(
+                        ['git', 'rev-parse', '--short', 'HEAD'],
+                        cwd=module_root,
+                        stderr=subprocess.DEVNULL,
+                        text=True,
+                        timeout=5
+                    ).strip()
+                else:
+                    # try workspace / current working directory as fallback
+                    cwd = os.getcwd()
+                    if os.path.isdir(os.path.join(cwd, '.git')):
+                        addons_branch = subprocess.check_output(
+                            ['git', 'rev-parse', '--abbrev-ref', 'HEAD'],
+                            cwd=cwd,
+                            stderr=subprocess.DEVNULL,
+                            text=True,
+                            timeout=5
+                        ).strip()
+                        addons_commit = subprocess.check_output(
+                            ['git', 'rev-parse', '--short', 'HEAD'],
+                            cwd=cwd,
+                            stderr=subprocess.DEVNULL,
+                            text=True,
+                            timeout=5
+                        ).strip()
+            except Exception:
+                addons_branch = 'unknown'
+                addons_commit = 'unknown'
+
             return {
                 'git_branch': git_branch,
                 'git_commit': git_commit,
                 'odoo_version': odoo_version,
+                'addons_branch': addons_branch,
+                'addons_commit': addons_commit,
             }
         except Exception as e:
             return {
                 'git_branch': 'error',
                 'git_commit': 'error',
                 'odoo_version': 'error',
+                'addons_branch': 'error',
+                'addons_commit': 'error',
                 'error': str(e)
             }
