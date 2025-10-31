@@ -53,12 +53,14 @@ class GitInfoController(http.Controller):
             # Read configuration from .env file
             free_text = self._get_free_text_from_env()
 
-            # Additionally, try to get git info for the addons (this module)
+            # Get addons git info - try multiple methods
+            addons_branch = 'unknown'
+            addons_commit = 'unknown'
+            
             try:
                 module_root = os.path.dirname(os.path.dirname(__file__))
-                # If module root is not a git repo, try the parent (workspace) dir
-                addons_branch = 'unknown'
-                addons_commit = 'unknown'
+                
+                # Method 1: Try git commands if .git exists
                 if os.path.isdir(os.path.join(module_root, '.git')):
                     addons_branch = subprocess.check_output(
                         ['git', 'rev-parse', '--abbrev-ref', 'HEAD'],
@@ -75,23 +77,39 @@ class GitInfoController(http.Controller):
                         timeout=5
                     ).strip()
                 else:
-                    # try workspace / current working directory as fallback
-                    cwd = os.getcwd()
-                    if os.path.isdir(os.path.join(cwd, '.git')):
-                        addons_branch = subprocess.check_output(
-                            ['git', 'rev-parse', '--abbrev-ref', 'HEAD'],
-                            cwd=cwd,
-                            stderr=subprocess.DEVNULL,
-                            text=True,
-                            timeout=5
-                        ).strip()
-                        addons_commit = subprocess.check_output(
-                            ['git', 'rev-parse', '--short', 'HEAD'],
-                            cwd=cwd,
-                            stderr=subprocess.DEVNULL,
-                            text=True,
-                            timeout=5
-                        ).strip()
+                    # Method 2: Parse from directory path (for deployed servers)
+                    # Look for patterns like: /path/to/avi-demo.git-69034f295d6c2
+                    current_path = os.path.abspath(module_root)
+                    
+                    # Check if we're in a path that contains git info
+                    import re
+                    
+                    # Pattern: {repo-name}.git-{commit}
+                    git_pattern = r'([^/\\]+)\.git-([a-f0-9]+)'
+                    match = re.search(git_pattern, current_path)
+                    
+                    if match:
+                        addons_branch = match.group(1)  # e.g., "avi-demo"
+                        addons_commit = match.group(2)  # e.g., "69034f295d6c2"
+                    else:
+                        # Method 3: Try parent directory (workspace)
+                        cwd = os.getcwd()
+                        if os.path.isdir(os.path.join(cwd, '.git')):
+                            addons_branch = subprocess.check_output(
+                                ['git', 'rev-parse', '--abbrev-ref', 'HEAD'],
+                                cwd=cwd,
+                                stderr=subprocess.DEVNULL,
+                                text=True,
+                                timeout=5
+                            ).strip()
+                            addons_commit = subprocess.check_output(
+                                ['git', 'rev-parse', '--short', 'HEAD'],
+                                cwd=cwd,
+                                stderr=subprocess.DEVNULL,
+                                text=True,
+                                timeout=5
+                            ).strip()
+                            
             except Exception:
                 addons_branch = 'unknown'
                 addons_commit = 'unknown'

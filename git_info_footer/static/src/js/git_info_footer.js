@@ -140,8 +140,8 @@ export class GitInfoFooterSafe extends Component {
             return `${this.state.freeText} | Loading...`;
         }
         
-        // Display addons branch and commit (addons-branch/addons-git-commit)
-        return `${this.state.freeText} | ${this.state.addonsBranch}/${this.state.addonsCommit}`;
+        // Display format: freeText | {addons-git-branch}/{addons-git-commit} | {odoo-commit}
+        return `${this.state.freeText} | ${this.state.addonsBranch}/${this.state.addonsCommit} | ${this.state.gitCommit}`;
     }
 
     get statusClass() {

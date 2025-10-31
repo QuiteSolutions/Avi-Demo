@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Git Info Footer',
-    'version': '18.0.1.0.2',
+    'version': '18.0.1.0.4',
     'category': 'Technical',
     'summary': 'Display git and system information in bottom-left footer',
     'description': """
         Display git and system information in a fixed footer at the bottom-left of all screens.
-        Shows: freeText | {git-branch}/{git-commit} | {odoo-version}
+        Shows: freeText | {addons-git-branch}/{addons-git-commit} | {odoo-commit}
     """,
     'depends': ['base', 'web'],
     'data': [],
