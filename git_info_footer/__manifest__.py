@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Git Info Footer',
-    'version': '18.0.1.0.8',
+    'version': '18.0.1.0.9',
     'category': 'Technical',
     'summary': 'Display git and system information in bottom-left footer',
     'description': """
