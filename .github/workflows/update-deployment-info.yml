@@ -3,8 +3,11 @@ name: Update Deployment Info
 on:
   push:
     branches: [ main, master, develop, copilot/*, feature/*, fix/* ]
-  pull_request:
-    branches: [ main, master ]
+
+# Grant write permissions to the GITHUB_TOKEN
+permissions:
+  contents: write
+  actions: read
 
 jobs:
   update-deployment-info:
@@ -16,6 +19,7 @@ jobs:
       with:
         fetch-depth: 0  # Fetch full history for accurate commit info
         token: ${{ secrets.GITHUB_TOKEN }}
+        persist-credentials: true
     
     - name: Get commit information
       id: commit_info
@@ -123,11 +127,11 @@ jobs:
         # Check if there are any changes to commit
         if ! git diff --quiet; then
           echo "Changes detected, committing..."
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           git add .env git_info_footer/__manifest__.py
           git commit -m "🤖 Auto-update deployment info and increment version [skip ci]"
-          git push
+          git push origin HEAD:${{ github.ref_name }}
           echo "✅ Changes committed and pushed"
         else
           echo "ℹ️ No changes to commit"
