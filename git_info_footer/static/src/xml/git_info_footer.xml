@@ -2,12 +2,10 @@
 <templates xml:space="preserve">
     
     <t t-name="git_info_footer.GitInfoFooter">
-        <div class="git-info-footer">
-            <t t-if="state.loaded">
-                <span t-esc="displayText"/>
-            </t>
-            <t t-else="">
-                <span>Loading git info...</span>
+        <div t-att-class="'git-info-footer ' + statusClass">
+            <span t-esc="displayText"/>
+            <t t-if="state.error">
+                <small class="git-info-error-details" t-esc="state.error"/>
             </t>
         </div>
     </t>

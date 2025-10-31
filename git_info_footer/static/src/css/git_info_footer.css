@@ -16,7 +16,7 @@
     white-space: nowrap;
     pointer-events: none;
     user-select: none;
-    transition: opacity 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .git-info-footer span {
@@ -24,7 +24,47 @@
     opacity: 0.9;
 }
 
-/* Slight hover effect in case pointer-events is changed */
+/* Status-specific styles */
+.git-info-footer.git-info-loading {
+    background-color: rgba(255, 165, 0, 0.75); /* Orange for loading */
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.git-info-footer.git-info-error {
+    background-color: rgba(220, 53, 69, 0.75); /* Red for error */
+    color: #ffffff;
+}
+
+.git-info-footer.git-info-loaded {
+    background-color: rgba(0, 0, 0, 0.75); /* Default dark for loaded */
+}
+
+/* Error details styling */
+.git-info-error-details {
+    display: block;
+    font-size: 9px;
+    opacity: 0.7;
+    margin-top: 2px;
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Pulsing animation for loading state */
+@keyframes pulse {
+    0% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.6;
+    }
+}
+
+/* Hover effect */
 .git-info-footer:hover {
     opacity: 1;
+    transform: scale(1.02);
 }
