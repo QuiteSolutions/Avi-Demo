@@ -17,7 +17,7 @@ export class GitInfoFooterSafe extends Component {
             gitCommit: "loading...",
             addonsBranch: "loading...",
             addonsCommit: "loading...",
-            freeText: "freeText1", // default fallback
+            freeText: "freeText", // default fallback - consistent with backend
             loaded: false,
             error: null,
         });

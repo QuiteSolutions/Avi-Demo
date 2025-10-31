@@ -60,8 +60,14 @@ class GitInfoController(http.Controller):
             try:
                 module_root = os.path.dirname(os.path.dirname(__file__))
                 
-                # Method 1: Try git commands if .git exists
-                if os.path.isdir(os.path.join(module_root, '.git')):
+                # Method 1: Check for deployment info in .env file
+                deployment_info = self._get_deployment_info_from_env()
+                if deployment_info['branch'] != 'unknown':
+                    addons_branch = deployment_info['branch']
+                    addons_commit = deployment_info['commit']
+                
+                # Method 2: Try git commands if .git exists and deployment info not found
+                elif os.path.isdir(os.path.join(module_root, '.git')):
                     addons_branch = subprocess.check_output(
                         ['git', 'rev-parse', '--abbrev-ref', 'HEAD'],
                         cwd=module_root,
@@ -77,7 +83,7 @@ class GitInfoController(http.Controller):
                         timeout=5
                     ).strip()
                 else:
-                    # Method 2: Parse from directory path (for deployed servers)
+                    # Method 3: Parse from directory path (for deployed servers)
                     # Look for patterns like: /path/to/avi-demo.git-69034f295d6c2
                     current_path = os.path.abspath(module_root)
                     
@@ -92,7 +98,7 @@ class GitInfoController(http.Controller):
                         addons_branch = match.group(1)  # e.g., "avi-demo"
                         addons_commit = match.group(2)  # e.g., "69034f295d6c2"
                     else:
-                        # Method 3: Try parent directory (workspace)
+                        # Method 4: Try parent directory (workspace)
                         cwd = os.getcwd()
                         if os.path.isdir(os.path.join(cwd, '.git')):
                             addons_branch = subprocess.check_output(
@@ -132,6 +138,45 @@ class GitInfoController(http.Controller):
                 'free_text': 'freeText',  # fallback
                 'error': str(e)
             }
+
+    def _get_deployment_info_from_env(self):
+        """
+        Read deployment information from .env file.
+        """
+        try:
+            # Try to find .env file in common locations
+            possible_paths = [
+                os.path.join(os.getcwd(), '.env'),
+                os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'),
+                os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), '.env'),
+            ]
+            
+            for env_path in possible_paths:
+                if os.path.isfile(env_path):
+                    # Read file once and parse all variables
+                    branch = 'unknown'
+                    commit = 'unknown'
+                    
+                    with open(env_path, 'r', encoding='utf-8') as f:
+                        for line in f:
+                            line = line.strip()
+                            if line.startswith('DEPLOYMENT_BRANCH='):
+                                branch = line.split('=', 1)[1].strip().strip('"').strip("'")
+                            elif line.startswith('DEPLOYMENT_COMMIT='):
+                                commit = line.split('=', 1)[1].strip().strip('"').strip("'")
+                    
+                    # Return if we found at least one deployment variable
+                    if branch != 'unknown' or commit != 'unknown':
+                        return {
+                            'branch': branch,
+                            'commit': commit
+                        }
+            
+            # Fallback if .env not found or variables not in it
+            return {'branch': 'unknown', 'commit': 'unknown'}
+            
+        except Exception:
+            return {'branch': 'unknown', 'commit': 'unknown'}
 
     def _get_free_text_from_env(self):
         """
