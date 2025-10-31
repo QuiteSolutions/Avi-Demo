@@ -12,7 +12,7 @@ class GitInfoController(http.Controller):
     @http.route('/git_info_footer/get_info', type='json', auth='user')
     def get_git_info(self):
         """
-        Return git branch, commit hash, and Odoo version information.
+        Return git branch, commit hash, Odoo version, and configuration information.
         """
         try:
             # Try to get git info from Odoo installation directory
@@ -49,6 +49,9 @@ class GitInfoController(http.Controller):
             
             # Get Odoo version/commit
             odoo_version = odoo.release.version
+            
+            # Read configuration from .env file
+            free_text = self._get_free_text_from_env()
 
             # Additionally, try to get git info for the addons (this module)
             try:
@@ -99,6 +102,7 @@ class GitInfoController(http.Controller):
                 'odoo_version': odoo_version,
                 'addons_branch': addons_branch,
                 'addons_commit': addons_commit,
+                'free_text': free_text,
             }
         except Exception as e:
             return {
@@ -107,5 +111,33 @@ class GitInfoController(http.Controller):
                 'odoo_version': 'error',
                 'addons_branch': 'error',
                 'addons_commit': 'error',
+                'free_text': 'freeText',  # fallback
                 'error': str(e)
             }
+
+    def _get_free_text_from_env(self):
+        """
+        Read FREE_TEXT from .env file, with fallback to default value.
+        """
+        try:
+            # Try to find .env file in common locations
+            possible_paths = [
+                os.path.join(os.getcwd(), '.env'),
+                os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'),
+                os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), '.env'),
+            ]
+            
+            for env_path in possible_paths:
+                if os.path.isfile(env_path):
+                    with open(env_path, 'r', encoding='utf-8') as f:
+                        for line in f:
+                            line = line.strip()
+                            if line.startswith('FREE_TEXT='):
+                                return line.split('=', 1)[1].strip().strip('"').strip("'")
+            
+            # Fallback to default if .env not found or FREE_TEXT not in it
+            return 'freeText'
+            
+        except Exception as e:
+            # If any error occurs, return default
+            return 'freeText'

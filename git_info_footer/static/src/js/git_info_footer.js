@@ -20,6 +20,7 @@ export class GitInfoFooter extends Component {
             gitCommit: "loading...",
             addonsBranch: "loading...",
             addonsCommit: "loading...",
+            freeText: "freeText", // default fallback
             loaded: false,
             error: null,
         });
@@ -38,6 +39,7 @@ export class GitInfoFooter extends Component {
             this.state.gitCommit = result.git_commit || "unknown";
             this.state.addonsBranch = result.addons_branch || 'unknown';
             this.state.addonsCommit = result.addons_commit || 'unknown';
+            this.state.freeText = result.free_text || 'freeText';
             this.state.loaded = true;
             this.state.error = null;
         } catch (error) {
@@ -91,15 +93,15 @@ export class GitInfoFooter extends Component {
 
     get displayText() {
         if (this.state.error) {
-            return `freeText | ERROR: ${this.state.error}`;
+            return `${this.state.freeText} | ERROR: ${this.state.error}`;
         }
 
         if (!this.state.loaded) {
-            return "freeText | Loading...";
+            return `${this.state.freeText} | Loading...`;
         }
 
         // Display addons branch and commit (addons-branch/addons-git-commit)
-        return `freeText | ${this.state.addonsBranch}/${this.state.addonsCommit}`;
+        return `${this.state.freeText} | ${this.state.addonsBranch}/${this.state.addonsCommit}`;
     }
 
     /**
