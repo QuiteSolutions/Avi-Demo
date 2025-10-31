@@ -1,40 +1,70 @@
 /** @odoo-module **/
 
-import { Component, onWillStart, onMounted, useState } from "@odoo/owl";
+import { Component, onMounted, useState } from "@odoo/owl";
 import { registry } from "@web/core/registry";
-import { rpc } from "@web/core/network/rpc_service";
 
 /**
- * GitInfoFooter Component
- * Displays git branch, commit, and Odoo version information
- * in a fixed footer at the bottom-left of the screen.
+ * GitInfoFooter Component - Odoo 18 Compatible Version
+ * Uses lazy loading and direct fetch to avoid service dependency issues
  */
-export class GitInfoFooter extends Component {
+export class GitInfoFooterSafe extends Component {
     static template = "git_info_footer.GitInfoFooter";
     static props = {};
 
     setup() {
-        // Initialize state
         this.state = useState({
             gitBranch: "loading...",
             gitCommit: "loading...",
             addonsBranch: "loading...",
             addonsCommit: "loading...",
-            freeText: "freeText", // default fallback
+            freeText: "freeText1", // default fallback
             loaded: false,
             error: null,
         });
 
-        // Use onMounted instead of onWillStart for better service availability
-        onMounted(async () => {
-            await this.loadGitInfo();
+        // Use onMounted for better timing - DOM is ready, services are available
+        onMounted(() => {
+            // Use setTimeout to ensure we're outside the OWL lifecycle
+            setTimeout(() => {
+                this.loadGitInfoSafe();
+            }, 100);
         });
     }
 
-    async loadGitInfo() {
+    /**
+     * Safe git info loading using native fetch instead of Odoo RPC service
+     */
+    async loadGitInfoSafe() {
         try {
-            // Use direct RPC import instead of service - avoids lifecycle issues
-            const result = await rpc("/git_info_footer/get_info", {});
+            // Get CSRF token for the request
+            const csrfToken = this.getCsrfToken();
+            
+            // Use native fetch instead of Odoo RPC service
+            const response = await fetch('/git_info_footer/get_info', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                },
+                body: JSON.stringify({
+                    jsonrpc: '2.0',
+                    method: 'call',
+                    params: {},
+                    id: Math.floor(Math.random() * 1000000),
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            
+            if (data.error) {
+                throw new Error(data.error.message || 'Server error');
+            }
+
+            const result = data.result || {};
             this.state.gitBranch = result.git_branch || "unknown";
             this.state.gitCommit = result.git_commit || "unknown";
             this.state.addonsBranch = result.addons_branch || 'unknown';
@@ -42,16 +72,44 @@ export class GitInfoFooter extends Component {
             this.state.freeText = result.free_text || 'freeText';
             this.state.loaded = true;
             this.state.error = null;
+            
         } catch (error) {
             console.error("Failed to load git info:", error);
-            // Provide fallback values
             this.state.gitBranch = "fetch error";
             this.state.gitCommit = "fetch error";
-            this.state.addonsBranch = this.getFallbackAddonsBranch();
-            this.state.addonsCommit = this.getFallbackAddonsCommit();
+            this.state.addonsBranch = "fetch error";
+            this.state.addonsCommit = "fetch error";
+            this.state.freeText = "freeText";
             this.state.loaded = true;
             this.state.error = error.message;
         }
+    }
+
+    /**
+     * Get CSRF token from various possible sources
+     */
+    getCsrfToken() {
+        // Try multiple sources for CSRF token
+        if (window.odoo && window.odoo.csrf_token) {
+            return window.odoo.csrf_token;
+        }
+        
+        // Try meta tag
+        const metaTag = document.querySelector('meta[name="csrf-token"]');
+        if (metaTag) {
+            return metaTag.getAttribute('content');
+        }
+        
+        // Try cookie
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            const [name, value] = cookie.trim().split('=');
+            if (name === 'csrf_token') {
+                return value;
+            }
+        }
+        
+        return '';
     }
 
     /**
@@ -59,54 +117,33 @@ export class GitInfoFooter extends Component {
      */
     getFallbackOdooVersion() {
         try {
-            // Try to get version from window.odoo
             if (window.odoo && window.odoo.info && window.odoo.info.server_version) {
                 return window.odoo.info.server_version;
             }
             
-            // Try alternative paths
             if (window.odoo && window.odoo.session_info && window.odoo.session_info.server_version) {
                 return window.odoo.session_info.server_version;
             }
             
-            return "unknown";
+            return "18.0"; // Default fallback
         } catch (error) {
-            return "unknown";
+            return "18.0";
         }
-    }
-
-    getFallbackAddonsBranch() {
-        try {
-            // Try to infer branch from window.odoo info if available
-            if (window.odoo && window.odoo.info && window.odoo.info.server_version) {
-                return 'unknown';
-            }
-            return 'unknown';
-        } catch (error) {
-            return 'unknown';
-        }
-    }
-
-    getFallbackAddonsCommit() {
-        return 'unknown';
     }
 
     get displayText() {
         if (this.state.error) {
             return `${this.state.freeText} | ERROR: ${this.state.error}`;
         }
-
+        
         if (!this.state.loaded) {
             return `${this.state.freeText} | Loading...`;
         }
-
+        
         // Display addons branch and commit (addons-branch/addons-git-commit)
         return `${this.state.freeText} | ${this.state.addonsBranch}/${this.state.addonsCommit}`;
     }
 
-    /**
-     * Get CSS class based on current state
-     */
     get statusClass() {
         if (this.state.error) {
             return "git-info-error";
@@ -118,8 +155,8 @@ export class GitInfoFooter extends Component {
     }
 }
 
-// Register the component in the main components registry
-registry.category("main_components").add("GitInfoFooter", {
-    Component: GitInfoFooter,
-    sequence: 100, // Ensure it loads after core components
+// Register with lower sequence to load after core components
+registry.category("main_components").add("GitInfoFooterSafe", {
+    Component: GitInfoFooterSafe,
+    sequence: 200, // Load after other components
 });
