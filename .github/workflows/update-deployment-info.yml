@@ -57,12 +57,13 @@ jobs:
           # Only update deployment variables, preserve all other settings including FREE_TEXT
           
           # Update existing deployment variables if they exist
+          # Use | as delimiter to avoid issues with forward slashes in branch names
           if grep -q "^DEPLOYMENT_BRANCH=" .env; then
-            sed -i "s/^DEPLOYMENT_BRANCH=.*/DEPLOYMENT_BRANCH=${{ steps.commit_info.outputs.branch_name }}/" .env
+            sed -i "s|^DEPLOYMENT_BRANCH=.*|DEPLOYMENT_BRANCH=${{ steps.commit_info.outputs.branch_name }}|" .env
           fi
           
           if grep -q "^DEPLOYMENT_COMMIT=" .env; then
-            sed -i "s/^DEPLOYMENT_COMMIT=.*/DEPLOYMENT_COMMIT=${{ steps.commit_info.outputs.commit_hash }}/" .env
+            sed -i "s|^DEPLOYMENT_COMMIT=.*|DEPLOYMENT_COMMIT=${{ steps.commit_info.outputs.commit_hash }}|" .env
           fi
           
           # Add deployment variables if they don't exist (but preserve existing FREE_TEXT)
@@ -108,7 +109,7 @@ jobs:
           
           # Update the version in __manifest__.py
           if [ "$NEW_VERSION" != "$CURRENT_VERSION" ]; then
-            sed -i "s/'version': '$CURRENT_VERSION'/'version': '$NEW_VERSION'/" git_info_footer/__manifest__.py
+            sed -i "s|'version': '$CURRENT_VERSION'|'version': '$NEW_VERSION'|" git_info_footer/__manifest__.py
             echo "✅ Version updated to $NEW_VERSION"
           else
             echo "⚠️ Version unchanged"
