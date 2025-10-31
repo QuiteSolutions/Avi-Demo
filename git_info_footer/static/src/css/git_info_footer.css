@@ -1,0 +1,30 @@
+/* Git Info Footer Styles */
+
+.git-info-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #ffffff;
+    padding: 6px 12px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+    font-size: 11px;
+    line-height: 1.4;
+    border-top-right-radius: 4px;
+    box-shadow: 2px -2px 8px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    transition: opacity 0.3s ease;
+}
+
+.git-info-footer span {
+    display: inline-block;
+    opacity: 0.9;
+}
+
+/* Slight hover effect in case pointer-events is changed */
+.git-info-footer:hover {
+    opacity: 1;
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    
+    <t t-name="git_info_footer.GitInfoFooter">
+        <div class="git-info-footer">
+            <t t-if="state.loaded">
+                <span t-esc="displayText"/>
+            </t>
+            <t t-else="">
+                <span>Loading git info...</span>
+            </t>
+        </div>
+    </t>
+    
+</templates>
