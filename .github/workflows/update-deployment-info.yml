@@ -1,0 +1,141 @@
+name: Update Deployment Info
+
+on:
+  push:
+    branches: [ main, master, develop, copilot/*, feature/*, fix/* ]
+
+# Grant write permissions to the GITHUB_TOKEN
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  update-deployment-info:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch full history for accurate commit info
+        token: ${{ secrets.GITHUB_TOKEN }}
+        persist-credentials: true
+    
+    - name: Get commit information
+      id: commit_info
+      run: |
+        # Get commit information
+        COMMIT_HASH=$(git rev-parse --short HEAD)
+        BRANCH_NAME=${GITHUB_REF#refs/heads/}
+        
+        echo "commit_hash=$COMMIT_HASH" >> $GITHUB_OUTPUT
+        echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+        
+        echo "Commit Hash: $COMMIT_HASH"
+        echo "Branch: $BRANCH_NAME"
+    
+    - name: Update .env file
+      run: |
+        # Check if .env file exists
+        if [ ! -f .env ]; then
+          echo "Creating .env file..."
+          cat > .env << EOF
+        # Git Info Footer Configuration
+        # Environment variables for the git_info_footer module
+
+        # The text to display before the git information in the footer
+        FREE_TEXT=freeText
+
+        # Deployment Information (Auto-updated by GitHub Actions)
+        DEPLOYMENT_BRANCH=${{ steps.commit_info.outputs.branch_name }}
+        DEPLOYMENT_COMMIT=${{ steps.commit_info.outputs.commit_hash }}
+
+        # Additional configuration options (optional)
+        # SHOW_LOADING_ANIMATION=true
+        # FOOTER_POSITION=bottom-left
+        # AUTO_REFRESH_INTERVAL=0
+        EOF
+        else
+          echo "Updating existing .env file - preserving user settings..."
+          
+          # Only update deployment variables, preserve all other settings including FREE_TEXT
+          
+          # Update existing deployment variables if they exist
+          # Use | as delimiter to avoid issues with forward slashes in branch names
+          if grep -q "^DEPLOYMENT_BRANCH=" .env; then
+            sed -i "s|^DEPLOYMENT_BRANCH=.*|DEPLOYMENT_BRANCH=${{ steps.commit_info.outputs.branch_name }}|" .env
+          fi
+          
+          if grep -q "^DEPLOYMENT_COMMIT=" .env; then
+            sed -i "s|^DEPLOYMENT_COMMIT=.*|DEPLOYMENT_COMMIT=${{ steps.commit_info.outputs.commit_hash }}|" .env
+          fi
+          
+          # Add deployment variables if they don't exist (but preserve existing FREE_TEXT)
+          if ! grep -q "^DEPLOYMENT_BRANCH=" .env; then
+            echo "" >> .env
+            echo "# Deployment Information (Auto-updated by GitHub Actions)" >> .env
+            echo "DEPLOYMENT_BRANCH=${{ steps.commit_info.outputs.branch_name }}" >> .env
+          fi
+          
+          if ! grep -q "^DEPLOYMENT_COMMIT=" .env; then
+            echo "DEPLOYMENT_COMMIT=${{ steps.commit_info.outputs.commit_hash }}" >> .env
+          fi
+        fi
+        
+        echo "Updated .env file contents:"
+        cat .env
+    
+    - name: Auto-increment module version
+      run: |
+        # Check if git_info_footer module exists
+        if [ -f "git_info_footer/__manifest__.py" ]; then
+          echo "Auto-incrementing git_info_footer module version..."
+          
+          # Get current version from __manifest__.py
+          CURRENT_VERSION=$(grep -o "'version': '[^']*'" git_info_footer/__manifest__.py | cut -d"'" -f4)
+          echo "Current version: $CURRENT_VERSION"
+          
+          # Parse version components (expects format: major.minor.series.revision.patch)
+          IFS='.' read -ra VERSION_PARTS <<< "$CURRENT_VERSION"
+          
+          # Increment the last component (patch version)
+          if [ ${#VERSION_PARTS[@]} -eq 5 ]; then
+            PATCH=${VERSION_PARTS[4]}
+            NEW_PATCH=$((PATCH + 1))
+            VERSION_PARTS[4]=$NEW_PATCH
+            NEW_VERSION=$(IFS='.'; echo "${VERSION_PARTS[*]}")
+          else
+            echo "Warning: Unexpected version format. Skipping version increment."
+            NEW_VERSION=$CURRENT_VERSION
+          fi
+          
+          echo "New version: $NEW_VERSION"
+          
+          # Update the version in __manifest__.py
+          if [ "$NEW_VERSION" != "$CURRENT_VERSION" ]; then
+            sed -i "s|'version': '$CURRENT_VERSION'|'version': '$NEW_VERSION'|" git_info_footer/__manifest__.py
+            echo "✅ Version updated to $NEW_VERSION"
+          else
+            echo "⚠️ Version unchanged"
+          fi
+        else
+          echo "⚠️ git_info_footer/__manifest__.py not found"
+        fi
+    
+    - name: Commit and push changes
+      run: |
+        # Check if there are any changes to commit
+        if ! git diff --quiet; then
+          echo "Changes detected, committing..."
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add .env git_info_footer/__manifest__.py
+          git commit -m "🤖 Auto-update deployment info and increment version [skip ci]"
+          git push origin HEAD:${{ github.ref_name }}
+          echo "✅ Changes committed and pushed"
+        else
+          echo "ℹ️ No changes to commit"
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
