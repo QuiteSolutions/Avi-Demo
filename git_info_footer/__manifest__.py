@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Git Info Footer',
-    'version': '18.0.1.0.1',
+    'version': '18.0.1.0.2',
     'category': 'Technical',
     'summary': 'Display git and system information in bottom-left footer',
     'description': """
@@ -12,7 +12,7 @@
     'data': [],
     'assets': {
         'web.assets_backend': [
-            'git_info_footer/static/src/js/git_info_footer_safe.js',
+            'git_info_footer/static/src/js/git_info_footer.js',
             'git_info_footer/static/src/xml/git_info_footer.xml',
             'git_info_footer/static/src/css/git_info_footer.css',
         ],
