@@ -60,7 +60,7 @@ jobs:
         FILES_CHANGED=$(git log --since="$YESTERDAY" --name-only --pretty=format: --no-merges | sort -u | grep -v '^$' || echo "No files changed")
         
         # Get diff stats
-        DIFF_STATS=$(git diff --stat $(git log --since="$YESTERDAY" --pretty=format:"%H" --no-merges | tail -1)^ HEAD 2>/dev/null || echo "Unable to generate diff stats")
+        DIFF_STATS=$(git log --since="$YESTERDAY" --stat --no-merges | tail -n +4 | grep -v '^$' | head -20 || echo "Unable to generate diff stats")
         
         # Save to temporary files for use in next step
         echo "$COMMIT_MESSAGES" > /tmp/commit_messages.txt
@@ -149,7 +149,9 @@ jobs:
               next
             }
             /<!-- DAILY_REVIEW_END -->/ {
+              print $0
               skip=0
+              next
             }
             !skip {
               print $0
@@ -184,7 +186,7 @@ jobs:
         else
           git add README.md
           git commit -m "🤖 Daily AI Review - $(date -u '+%Y-%m-%d') [skip ci]"
-          git push origin HEAD:${{ github.ref_name }}
+          git push
           echo "✅ AI review committed and pushed"
         fi
       env:
