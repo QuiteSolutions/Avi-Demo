@@ -9,7 +9,7 @@
         Adds a text input field with live preview display below it.
         Updates preview text in real-time as user types.
     """,
-    'depends': ['pos_base_popup', 'pos_extended_popup', 'pos_override_popup'],
+    'depends': ['pos_base_popup', 'pos_override_popup', 'pos_extended_popup'],
     'assets': {
         'point_of_sale._assets_pos': [
             'pos_load_popup/static/src/js/load_popup_widget.js',
